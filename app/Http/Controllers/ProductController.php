@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductStoreRequest;
 use App\Models\product;
-use HttpResponse;
+//use HttpResponse;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
+use function PHPUnit\Framework\isEmpty;
 
 class ProductController extends Controller
 {
@@ -62,6 +63,7 @@ class ProductController extends Controller
                 'name' => $validated['name'],
                 'description' => $validated['description'],
                 'product_image' => $save_url,
+                'category_id' => $validated['category_id'],
             ]);
 
             return response()->json([
@@ -125,7 +127,32 @@ class ProductController extends Controller
         $product::update([
             'name' => $validated['name'],
             'description' => $validated['description'],
-        ])->save;
+            'category_id' => $validated['category_id'],
+        ]);
+
+        if($validated->hasfile('image')) {
+            if ($oldImage = $product['product_image'])
+                unlink($oldImage);
+
+            $image = $validated->file('image');
+            $name_gen = time().'.'. $image->getClientOriginalExtension();
+            Image::make($image)->save('uploads/products/' . $name_gen);
+            $save_url = 'uploads/products/' . $name_gen;
+
+            $product::update([
+                'product_image' => $save_url,
+            ]);
+        }
+
+        $product->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'product updated successfully',
+            'data' => [
+                'product' => $product,
+            ],
+        ]);
     }
 
     /**
@@ -150,6 +177,32 @@ class ProductController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'product deleted successfully',
+        ]);
+    }
+
+    public function clearProductImage(int $id)
+    {
+
+        $product = product::find($id);
+        if(! $product) {
+            throw new HttpResponseException(response()->json([
+                'status' => 'error',
+                'message' => 'product not found !',
+            ]));
+        }
+
+        if( isEmpty($product['product_image']) ) {
+            throw new HttpResponseException(response()->json([
+                'status' => 'error',
+                'message' => 'image already empty',
+            ]));
+        }
+
+        unlink($product['product_image']);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'product Image clear successfully',
         ]);
     }
 }

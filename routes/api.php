@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminAuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserAuthController;
 use Illuminate\Http\Request;
@@ -34,6 +35,17 @@ Route::middleware('api')->prefix('auth')->group(function () {
 });
 
 
+
+/*
+|--------------------------------------------------------------------------
+| API Routes For Admin
+|--------------------------------------------------------------------------
+|
+| Here is where you can register API routes for your application. These
+| routes are loaded by the RouteServiceProvider within a group which
+| is assigned the "api" middleware group. Enjoy building your API!
+|
+*/
 Route::prefix('admin')->group(function () {
 
     Route::controller(AdminAuthController::class)->group(function (){
@@ -44,10 +56,20 @@ Route::prefix('admin')->group(function () {
         Route::get('logout', 'logout');
     });
 
-    Route::controller(ProductController::class)->group(function (){
+    Route::controller(ProductController::class)->prefix('product')->group(function (){
         Route::post('store', 'store');
         Route::put('update/{id}', 'update');
         Route::delete('destroy/{id}', 'destroy');
+        Route::delete('delete-main-image/{id}', 'clearProductImage');
+    });
+
+
+    Route::controller(CategoryController::class)->prefix('category')->group(function (){
+        Route::get('all', 'index');
+        Route::post('store', 'store');
+        Route::put('update/{id}', 'update');
+        Route::delete('destroy/{id}', 'destroy');
+//        Route::delete('delete-main-image/{id}', 'clearProductImage');
     });
 
 });

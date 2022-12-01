@@ -2,11 +2,12 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use Illuminate\Contracts\Validation\Validator;
 
-class ProductStoreRequest extends FormRequest
+
+class CategoryStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,10 +27,8 @@ class ProductStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'  => 'required | string | min:3',
-            'description'  => 'required | string',
-            'product_image'  => 'required | image | mimes:jpeg,png,jpg',
-            'category_id'  => 'required | integer ',
+            'category_name' => 'required | string | min:3',
+            'parent_category_id' => 'required',
         ];
     }
 
@@ -38,8 +37,8 @@ class ProductStoreRequest extends FormRequest
     {
         throw new HttpResponseException(response()->json([
             'status' => 'error',
-            'message' => 'add product validation error',
-            'errors' => $validator->errors(),
-        ]));
+            'message' => 'validation error',
+            'error' => $validator->errors(),
+        ], 400));
     }
 }
