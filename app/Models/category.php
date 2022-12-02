@@ -31,6 +31,11 @@ class category extends Model
 
     public function products()
     {
-        return $this->hasMany(product::class);
+        return hasMany(product::class);
+    }
+
+    public function variation()
+    {
+        return $this->hasMany(variation::class);
     }
 }
