@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('variatio_options', function (Blueprint $table) {
+        Schema::create('variation_options', function (Blueprint $table) {
             $table->id();
             $table->string('value');
             $table->foreignId('variation_id')->references('id')->on('variations');
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('variatio_options');
+        Schema::dropIfExists('variation_options');
     }
 };

@@ -30,8 +30,12 @@ Route::middleware('api')->prefix('auth')->group(function () {
        Route::get('refresh', 'refresh');
        Route::get('me', 'me');
        Route::get('logout', 'logout');
-   }) ;
+   });
 
+});
+
+Route::controller(ProductController::class)->prefix('product')->group( function() {
+    Route::get('/all', 'index');
 });
 
 
@@ -66,6 +70,7 @@ Route::prefix('admin')->group(function () {
 
     Route::controller(CategoryController::class)->prefix('category')->group(function (){
         Route::get('all', 'index');
+        Route::get('category-info/{id}', 'getOneCategory');
         Route::post('store', 'store');
         Route::put('update/{id}', 'update');
         Route::delete('destroy/{id}', 'destroy');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Exceptions\HttpResponseException;
+use function PHPUnit\Framework\isEmpty;
 use function PHPUnit\Framework\throwException;
 use App\Http\Requests\CategoryStoreRequest;
 use Illuminate\Http\JsonResponse;
@@ -24,7 +25,7 @@ class CategoryController extends Controller
     public function index()
     {
 
-        $categories = category::with('sub_category')->whereNull('parent_category_id')->get();
+        $categories = category::with('sub_category')->with('variation')->whereNull('parent_category_id')->get();
 
         return response()->json([
             'status' => 'success',
@@ -33,15 +34,29 @@ class CategoryController extends Controller
         ]);
     }
 
+
     /**
      * Show the form for creating a new resource.
-     *
-//     * @return \Illuminate\Http\Response
+     * @param int $id
+     * @return JsonResponse
      */
-//    public function create()
-//    {
-        //
-//    }
+    public function getOneCategory(int $id): JsonResponse
+    {
+        $category = category::where('id', $id)->with('variation')->get();
+
+        if ( isEmpty($category)) {
+            throw new HttpResponseException(response()->json([
+                'status' => 'error',
+                'message' => 'category not found',
+            ]));
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'get category info',
+            'data' => $category,
+        ]);
+    }
 
     /**
      * Store a newly created resource in storage.

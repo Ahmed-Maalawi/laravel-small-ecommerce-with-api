@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('product_configurations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_item_id')->references('id')->on('product_items');
-            $table->foreignId('variatio_option_id')->references('id')->on('variatio_options');
+            $table->foreignId('variation_option_id')->references('id')->on('variation_options');
             $table->timestamps();
         });
     }

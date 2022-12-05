@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProductStoreRequest;
 use App\Models\product;
 //use HttpResponse;
+use App\Models\product_configuration;
+use App\Models\product_item;
+use App\Models\variatio_option;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,7 +23,7 @@ class ProductController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:admin-api');
+//        $this->middleware('auth:admin-api');
     }
 
     /**
@@ -30,7 +33,15 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+
+        $products = product::with('productItems')->get();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'return all products',
+            'data' => [
+                'products' => $products,
+            ]
+        ]);
     }
 
     /**
@@ -46,40 +57,110 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param ProductStoreRequest $request
-     * @return JsonResponse
+//     * @param ProductStoreRequest $request
+//     * @return JsonResponse
      */
-    public function store(ProductStoreRequest $request)
+    public function store()
     {
-        try {
-            $validated = $request->validated();
 
-            $image = $request->file('image');
-            $name_gen = time().'.'. $image->getClientOriginalExtension();
-            Image::make($image)->save('uploads/products/' . $name_gen);
-            $save_url = 'uploads/products/' . $name_gen;
+        $request_2 = [
+            'product' => [
+                'category_id' => 3,
+                'name' => 'nike شورت',
+                'description' => 'nike شورت',
+                'product_image' => 'nike شورت',
+            ],
+            'product_items' => [
+                [
+                    'sku' => 'lkf4fg574d32fg854dfgh354',
+                    'qty_in_stock' => 100,
+                    'product_image' => 'public/uploads/products/02227d8f-7903-4957-9ae7-0ffb8a3737a3.avif',
+                    'price' => 50,
+                    'variation' => [1,4],
+                ],
+                [
+                    'sku' => 'lkf4fg574d32fg854dfgh354',
+                    'qty_in_stock' => 150,
+                    'product_image' => 'public/uploads/products/02227d8f-7903-4957-9ae7-0ffb8a3737a3.avif',
+                    'price' => 100,
+                    'variation' => [2,4]
+                ],
+            ]
+        ];
+        $newProduct = $request_2['product'];
+        $product = product::create([
+            'category_id' => $newProduct['category_id'],
+            'name' => $newProduct['category_id'],
+            'description' => $newProduct['description'],
+            'product_image' => $newProduct['product_image'],
+        ]);
 
-            $product = product::create([
-                'name' => $validated['name'],
-                'description' => $validated['description'],
-                'product_image' => $save_url,
-                'category_id' => $validated['category_id'],
+//        return response()->json([
+//            'data' => $product
+//        ]);
+
+        foreach ($request_2['product_items'] as $productItem) {
+            $newItem = product_item::create([
+                'product_id' => $product->id,
+                'sku' => $productItem['sku'],
+                'qty_in_stock' => $productItem['qty_in_stock'],
+                'product_image' => $productItem['product_image'],
+                'price' => $productItem['price'],
             ]);
 
-            return response()->json([
-                'status' => 'success',
-                'message' => 'product added successfully',
-                'data' => $product,
-            ]);
-
-        } catch (HttpResponseException $e) {
-
-            throw new $e(response()->json([
-                'status' => 'error',
-                'message' => 'product store error',
-            ], 400));
-
+            foreach ($productItem['variation'] as $variation) {
+                product_configuration::create([
+                    'product_item_id' => $newItem->id,
+                    'variation_option_id' => $variation,
+                ]);
+            }
         }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'product added successfully',
+            'data' => [
+                'product' => $product->with('productItems')->get(),
+            ]
+        ], 201);
+//        }
+//        try {
+//            $validated = $request->validated();
+//
+//            $image = $request->file('image');
+//            $name_gen = time().'.'. $image->getClientOriginalExtension();
+//            Image::make($image)->save('uploads/products/' . $name_gen);
+//            $save_url = 'uploads/products/' . $name_gen;
+//
+//            $product = product::create([
+//                'name' => $validated['name'],
+//                'description' => $validated['description'],
+//                'product_image' => $save_url,
+//                'category_id' => $validated['category_id'],
+//            ]);
+//
+//            $product_item = product_item::create([
+//               'product_id' => $product['id'],
+//                '' => '',
+//            ]);
+//
+//            return response()->json([
+//                'status' => 'success',
+//                'message' => 'product added successfully',
+//                'data' => $product,
+//            ]);
+//
+//        } catch (HttpResponseException $e) {
+//
+//            throw new $e(response()->json([
+//                'status' => 'error',
+//                'message' => 'product store error',
+//            ], 400));
+//
+//        }
+
+
+
     }
 
     /**

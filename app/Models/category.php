@@ -31,7 +31,7 @@ class category extends Model
 
     public function products()
     {
-        return hasMany(product::class);
+        return $this->hasMany(product::class);
     }
 
     public function variation()
