@@ -25,8 +25,9 @@ class CategoryController extends Controller
     public function index()
     {
 
-        $categories = category::with('sub_category')->with('variation')->whereNull('parent_category_id')->get();
-
+        $categories = category::all();
+//        $categories = category::with(['sub_category','variation'])->whereNull('parent_category_id')->get();
+//
         return response()->json([
             'status' => 'success',
             'message' => 'get all categories',
@@ -37,26 +38,26 @@ class CategoryController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     * @param int $id
-     * @return JsonResponse
+//     * @param int $id
+//     * @return JsonResponse
      */
-    public function getOneCategory(int $id): JsonResponse
-    {
-        $category = category::where('id', $id)->with('variation')->get();
-
-        if ( isEmpty($category)) {
-            throw new HttpResponseException(response()->json([
-                'status' => 'error',
-                'message' => 'category not found',
-            ]));
-        }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'get category info',
-            'data' => $category,
-        ]);
-    }
+//    public function getOneCategory(int $id): JsonResponse
+//    {
+//        $category = category::where('id', $id)->with('variation')->get();
+//
+//        if ( isEmpty($category)) {
+//            throw new HttpResponseException(response()->json([
+//                'status' => 'error',
+//                'message' => 'category not found',
+//            ]));
+//        }
+//
+//        return response()->json([
+//            'status' => 'success',
+//            'message' => 'get category info',
+//            'data' => $category,
+//        ]);
+//    }
 
     /**
      * Store a newly created resource in storage.
@@ -77,6 +78,7 @@ class CategoryController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'category created successfully',
+                'data' => $category,
             ], 201);
 
         } catch (HttpResponseException $e) {
@@ -90,13 +92,26 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      *
-//     * @param  int  $id
-//     * @return \Illuminate\Http\Response
+     * @param  int  $id
+     * @return JsonResponse
      */
-//    public function show($id)
-//    {
-//        //
-//    }
+    public function show($id)
+    {
+        $category = category::find( $id)->first()->get();
+
+        if ( isEmpty($category)) {
+            throw new HttpResponseException(response()->json([
+                'status' => 'error',
+                'message' => 'category not found',
+            ]));
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'get category info',
+            'data' => $category,
+        ]);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -126,13 +141,16 @@ class CategoryController extends Controller
             throw new HttpResponseException(response()->json([
                 'status' => 'error',
                 'message' => 'category not found !',
-            ]));
+            ], 400));
         }
+//        return $request['category_name'];
 
         $category->update([
-            'category_name' => $validated['category_name'],
-            'parent_category_id' => ($validated['parent_category_id'])?? null,
-        ])->save();
+            'category_name' => $request['category_name'],
+            'parent_category_id' => ($request['parent_category_id'])?? null,
+        ]);
+
+        $category->save();
 
         return response()->json([
             'status' => 'success',
@@ -148,7 +166,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        $category = category::find($id);
+        $category = category::withCount('sub_category')->find($id);
 
         if (! $category) {
             throw new HttpResponseException(response()->json([
@@ -157,7 +175,34 @@ class CategoryController extends Controller
             ], 400));
         }
 
-        $category->delete();
+//        return response()->json($category);
+
+        if ($category['sub_category_count'] > 0) {
+            throw new HttpResponseException(response()->json([
+                'status' => 'error',
+                'message' => 'category have subCategories !',
+            ], 400));
+        }
+        try {
+//            $category->update([
+//                'parent_category_id' => null,
+//            ]);
+//            $category->save();
+            $category->delete();
+        } catch (HttpResponseException $e) {
+            throw new $e(response()->json([
+                'status' => 'error',
+                'message' => 'some thing went wrong !',
+            ], 400));
+        }
+
+//        if (count($category->children)) {
+//            foreach ($category->children as $sub_category) {
+//                $subCategory = category::find($sub_category['id'])->delete();
+//            }
+//        }
+//        $category->sub_category->delete();
+
 
         return response()->json([
             'status' => 'success',

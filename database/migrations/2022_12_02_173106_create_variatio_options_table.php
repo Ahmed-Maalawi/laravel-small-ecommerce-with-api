@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('variation_options', function (Blueprint $table) {
             $table->id();
             $table->string('value');
-            $table->foreignId('variation_id')->references('id')->on('variations');
+            $table->foreignId('variation_id')->references('id')->on('variations')->cascadeOnDelete();
             $table->timestamps();
         });
     }

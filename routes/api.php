@@ -72,7 +72,7 @@ Route::prefix('admin')->group(function () {
         Route::get('all', 'index');
         Route::get('category-info/{id}', 'getOneCategory');
         Route::post('store', 'store');
-        Route::put('update/{id}', 'update');
+        Route::post('update/{id}', 'update');
         Route::delete('destroy/{id}', 'destroy');
 //        Route::delete('delete-main-image/{id}', 'clearProductImage');
     });

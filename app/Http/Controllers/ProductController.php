@@ -7,7 +7,7 @@ use App\Models\product;
 //use HttpResponse;
 use App\Models\product_configuration;
 use App\Models\product_item;
-use App\Models\variatio_option;
+use App\Models\variation_option;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -19,12 +19,12 @@ class ProductController extends Controller
     /**
      * Create a new AuthController instance.
      *
-     * @return void
+//     * @return void
      */
-    public function __construct()
-    {
+//    public function __construct()
+//    {
 //        $this->middleware('auth:admin-api');
-    }
+//    }
 
     /**
      * Display a listing of the resource.
@@ -87,6 +87,8 @@ class ProductController extends Controller
                 ],
             ]
         ];
+
+
         $newProduct = $request_2['product'];
         $product = product::create([
             'category_id' => $newProduct['category_id'],
@@ -166,13 +168,15 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-//     * @param  int  $id
-//     * @return \Illuminate\Http\Response
+     * @param  int  $id
+     * @return JsonResponse
      */
-//    public function show($id)
-//    {
-//        //
-//    }
+    public function show(int $id)
+    {
+        $product = product::with('productItems')->get();
+
+        return response()->json($product);
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -285,5 +289,21 @@ class ProductController extends Controller
             'status' => 'success',
             'message' => 'product Image clear successfully',
         ]);
+    }
+
+    private function uploadImg(string $path, $image): string
+    {
+        try {
+            $name_gen = time().'.'. $image->getClientOriginalExtension();
+            Image::make($image)->save($path . $name_gen);
+            $save_url = $path . $name_gen;
+
+            return $save_url;
+        } catch (HttpResponseException $e) {
+            throw new $e(response()->json([
+                'status' => 'error',
+                'message' => 'image store error',
+            ]));
+        }
     }
 }
