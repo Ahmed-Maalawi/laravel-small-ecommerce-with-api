@@ -1,27 +1,39 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    value: 0,
+    login: false,
+    userType: 'user',
+    token: '',
+    userData: {}
 }
 
-export const counterSlice = createSlice({
-    name: 'counter',
+export const authentication = createSlice({
+    name: 'auth',
     initialState,
     reducers: {
-        increment: (state) => {
+        login: (state) => {
+            state.login = true
+        },
+        logOut: (state, action) => {
+            state.login = true
+        },
+        changeUser: (state) => {
+                state.userType = 'user'
+        },
+        changeAdmin: (state) => {
+                state.userType = 'admin'
 
-            state.value += 1
         },
-        decrement: (state) => {
-            state.value -= 1
+        setToken: (state, action) => {
+            state.token = action.payload
         },
-        incrementByAmount: (state, action) => {
-            state.value += action.payload
+        setUserData: (state, action) => {
+            state.userData = action.payload
         },
     },
 })
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
-let  counterSliceRuducer = counterSlice.reducer
+export const { login, logOut ,changeUser,changeAdmin,setToken,setUserData } = authentication.actions
+let auth = authentication.reducer
 
-export default counterSliceRuducer;
+export default auth;
