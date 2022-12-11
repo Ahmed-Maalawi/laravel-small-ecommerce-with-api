@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminAuthController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserAuthController;
+use App\Http\Controllers\VariationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -75,6 +76,14 @@ Route::prefix('admin')->group(function () {
         Route::post('update/{id}', 'update');
         Route::delete('destroy/{id}', 'destroy');
 //        Route::delete('delete-main-image/{id}', 'clearProductImage');
+    });
+
+    Route::controller(VariationController::class)->prefix('variation')->group(function (){
+        Route::get('all', 'index');
+        Route::post('store', 'store');
+        Route::get('show/{id}', 'show');
+        Route::post('update/{id}', 'update');
+        Route::delete('delete/{id}', 'destroy');
     });
 
 });
