@@ -7,9 +7,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\variation_optionsController;
 use App\Http\Controllers\VariationController;
-=======
 use App\Http\Controllers\UserController;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
