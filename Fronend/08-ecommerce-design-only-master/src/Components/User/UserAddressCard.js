@@ -2,12 +2,31 @@ import React from 'react'
 import { Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import deleteicon from '../../images/delete.png'
-const UserAddressCard = () => {
+import { Api } from '../../Api/mainHost'
+import axios from 'axios';
+import { useSelector } from 'react-redux';
+
+
+const UserAddressCard = ({ address_type, phone_number, address_description, id,getAdress }) => {
+
+    const token = useSelector(state => state.auth.token)
+
+
+    async function deleteAdress(id) {
+        let { data } = await axios.delete(`${Api}address/delete-address/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            },
+        })
+
+        return data
+    }
+
     return (
         <div className="user-address-card my-3 px-2">
             <Row className="d-flex justify-content-between  ">
                 <Col xs="1">
-                    <div className="p-2">المنزل</div>
+                    <div className="p-2">{address_type}</div>
                 </Col>
                 <Col xs="4" className="d-flex d-flex justify-content-end">
                     <div className="d-flex p-2">
@@ -19,11 +38,11 @@ const UserAddressCard = () => {
                                 height="17px"
                                 width="15px"
                             />
-                            <Link to="/user/edit-address" style={{ textDecoration: "none" }}>
+                            <Link to={{ pathname: "/user/edit-address" }} state={{ address_type: address_type, address_description: address_description, phone_number: phone_number, id: id }} style={{ textDecoration: "none" }}>
                                 <p className="item-delete-edit"> تعديل</p>
                             </Link>
                         </div>
-                        <div className="d-flex ">
+                        <div className="d-flex " >
                             <img
                                 alt=""
                                 className="ms-1 mt-2"
@@ -31,7 +50,7 @@ const UserAddressCard = () => {
                                 height="17px"
                                 width="15px"
                             />
-                            <p className="item-delete-edit"> ازاله</p>
+                            <p onClick={() => {deleteAdress(id); getAdress()}}   className="item-delete-edit"> ازاله</p>
                         </div>
                     </div>
                 </Col>
@@ -45,7 +64,7 @@ const UserAddressCard = () => {
                             fontFamily: "Almarai",
                             fontSize: "14px",
                         }}>
-                        القاهرة مدينه نصر شارع التسعين عماره ١٤
+                        {address_description}
                     </div>
                 </Col>
             </Row>
@@ -68,7 +87,7 @@ const UserAddressCard = () => {
                             fontSize: "16px",
                         }}
                         className="mx-2">
-                        0021313432423
+                        {phone_number}
                     </div>
                 </Col>
             </Row>
