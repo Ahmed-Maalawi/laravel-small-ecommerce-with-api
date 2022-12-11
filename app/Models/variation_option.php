@@ -9,6 +9,10 @@ class variation_option extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+      'value', 'variation_id',
+    ];
+
     public function variation()
     {
         return $this->belongsTo(variation::class);

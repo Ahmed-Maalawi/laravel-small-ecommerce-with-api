@@ -52,45 +52,46 @@ class DatabaseSeeder extends Seeder
             'category_id' => 3,
         ]);
 
-        variation_option::factory()->create([
-            'value' => 'احمر',
-            'variation_id' => 1,
-        ]);
-
-        variation_option::factory()->create([
-            'value' => 'اسود',
-            'variation_id' => 1,
-        ]);
-
-        variation_option::factory()->create([
-            'value' => 'ابيض',
-            'variation_id' => 1,
-        ]);
-
-        variation_option::factory()->create([
-            'value' => 'S',
-            'variation_id' => 2,
-        ]);
-
-        variation_option::factory()->create([
-            'value' => 'M',
-            'variation_id' => 2,
-        ]);
-
-        variation_option::factory()->create([
-            'value' => 'L',
-            'variation_id' => 2,
-        ]);
-
-        variation_option::factory()->create([
-            'value' => 'XL',
-            'variation_id' => 2,
-        ]);
-
-        variation_option::factory()->create([
-            'value' => 'XXL',
-            'variation_id' => 2,
-        ]);
+//        variation_option::factory()->create([
+//            'value' => 'احمر',
+//            'variation_id' => 1,
+//        ]);
+//
+//        variation_option::factory()->create([
+//            'value' => 'اسود',
+//            'variation_id' => 1,
+//        ]);
+//
+//        variation_option::factory()->create([
+//            'value' => 'ابيض',
+//            'variation_id' => 1,
+//        ]);
+//
+//        variation_option::factory()->create([
+//            'value' => 'S',
+//            'variation_id' => 2,
+//        ]);
+//
+//        variation_option::factory()->create([
+//            'value' => 'M',
+//            'variation_id' => 2,
+//        ]);
+//
+//        variation_option::factory()->create([
+//            'value' => 'L',
+//            'variation_id' => 2,
+//        ]);
+//
+//        variation_option::factory()->create([
+//            'value' => 'XL',
+//            'variation_id' => 2,
+//        ]);
+//
+//        variation_option::factory()->create([
+//            'value' => 'XXL',
+//            'variation_id' => 2,
+//        ]);
+//        ----------------------------------------------------------
 
 //        product::factory()->create([
 //            'category_id' => 3,
