@@ -1,13 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    login: false,
-    userType: 'user',
-    token: '',
-    userData: {}
+    address_type: 'work',
+    phone_number: "01060332201",
+    address_description: 'المعادي',
 }
 
-export const authentication = createSlice({
+export const adresses = createSlice({
     name: 'auth',
     initialState,
     reducers: {
@@ -33,7 +32,7 @@ export const authentication = createSlice({
     },
 })
 
-export const { login, logOut ,changeUser,changeAdmin,setToken,setUserData } = authentication.actions
-let auth = authentication.reducer
+export const { login, logOut ,changeUser,changeAdmin,setToken,setUserData } = adresses.actions
+let userAdress = adresses.reducer
 
-export default auth;
+export default userAdress;
