@@ -1,9 +1,11 @@
 import axios from 'axios'
+import Joi from 'joi'
 import React from 'react'
 import { useState } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import { Link, useNavigate } from 'react-router-dom'
 import { Api } from '../../Api/mainHost'
+
 const RegisterPage = () => {
 
     const navigate = useNavigate();
@@ -11,8 +13,22 @@ const RegisterPage = () => {
 
     let [user, setUser] = useState({
         email: "",
-        password: ''
+        password: '',
+        phone: '',
+        password_confirmation: ''
     })
+
+    let registerValidation = () => {
+        let form =Joi.object({
+            email: Joi.string().email({ tlds: { allow: ['com', 'net'] } }).required,
+            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required,
+            phone: Joi.number().min(11).max(11),
+            password_confirmation: Joi.ref('password')
+
+        })
+
+        console.log(form.validate(user))
+    }
 
     function getUser(eventInfo) {
         let myUser = { ...user }
@@ -30,6 +46,7 @@ const RegisterPage = () => {
 
     function sumitLogin(e) {
         e.preventDefault()
+        registerValidation()
         sendLoginData()
     }
 

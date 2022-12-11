@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { Container, Row, Col } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { login, changeUser, changeAdmin, setToken, setUserData } from '../../Redux/auth'
+import { changeUser, changeAdmin, setToken, setUserData } from '../../Redux/auth'
 import { Api } from '../../Api/mainHost'
 import axios from 'axios'
 const LoginPage = () => {
