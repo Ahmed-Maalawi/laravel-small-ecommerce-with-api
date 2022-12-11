@@ -10,7 +10,7 @@ use App\Models\user_address;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 
-class AddressController extends Controller
+class   AddressController extends Controller
 {
     public function __construct()
     {
@@ -21,9 +21,10 @@ class AddressController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(): JsonResponse
+    public function index()
     {
-        $addresses = User::where('id', auth()->id())->with('user_address')->get();
+        $addressesIds = user_address::where('user_id', auth()->id())->get(['id']);
+        $addresses = address::whereIn('id', $addressesIds)->get();
 
         if (! $addresses) {
             return response()->json([

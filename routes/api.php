@@ -45,6 +45,7 @@ Route::middleware('api')->prefix('auth')->group(function () {
 
 Route::controller(AddressController::class)->middleware('api')->prefix('address')->group(function (){
     Route::post('add-address', 'store');
+    Route::get('all-address', 'index');
     Route::post('update-address/{id}', 'update');
     Route::delete('delete-address/{id}', 'destroy');
 });
