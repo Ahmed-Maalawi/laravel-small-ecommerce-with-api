@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\category;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,8 @@ class variationFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'category_id' => category::factory()->create(),
+            'name' => $this->faker->title(),
         ];
     }
 }

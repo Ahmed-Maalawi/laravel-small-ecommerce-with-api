@@ -23,5 +23,8 @@ class product_item extends Model
         return $this->hasMany(product_configuration::class);
     }
 
-
+    public function favoriteCartItems()
+    {
+        return $this->hasMany(favoriteCartItem::class);
+    }
 }
