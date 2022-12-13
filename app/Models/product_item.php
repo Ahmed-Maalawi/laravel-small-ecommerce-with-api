@@ -23,8 +23,13 @@ class product_item extends Model
         return $this->hasMany(product_configuration::class);
     }
 
-    public function favoriteCartItems()
+    public function favourites()
     {
-        return $this->hasMany(favoriteCartItem::class);
+        return $this->belongsTo(FavouriteItem::class, 'id', 'product_item_id')->where('user_id', auth()->id());
+    }
+
+    public function like()
+    {
+        return $this->favourites()->selectRaw('product_item_id,count(*) as count')->groupBy('product_item_id');
     }
 }

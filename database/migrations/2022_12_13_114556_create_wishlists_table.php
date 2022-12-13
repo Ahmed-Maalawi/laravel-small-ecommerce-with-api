@@ -13,9 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('favorite_carts', function (Blueprint $table) {
+        Schema::create('wishlists', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('user_id')->references('id')->on('users')
+                ->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreignId('product_id')->references('id')->on('products')
+                ->cascadeOnUpdate()->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('favorite_carts');
+        Schema::dropIfExists('wishlists');
     }
 };

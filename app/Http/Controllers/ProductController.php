@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductStoreRequest;
 use App\Models\product;
-//use HttpResponse;
 use App\Models\product_configuration;
 use App\Models\product_item;
 use App\Models\variation_option;
