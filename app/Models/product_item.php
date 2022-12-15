@@ -28,8 +28,8 @@ class product_item extends Model
         return $this->belongsTo(FavouriteItem::class, 'id', 'product_item_id')->where('user_id', auth()->id());
     }
 
-    public function like()
+    public function shoppingCartItem()
     {
-        return $this->favourites()->selectRaw('product_item_id,count(*) as count')->groupBy('product_item_id');
+        return $this->hasMany(shopping_cart_item::class);
     }
 }

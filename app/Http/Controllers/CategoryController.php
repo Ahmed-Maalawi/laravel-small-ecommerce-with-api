@@ -25,7 +25,7 @@ class CategoryController extends Controller
     public function index()
     {
 
-        $categories = category::all();
+        $categories = category::all('id', 'category_name', 'parent_category_id');
 //        $categories = category::with(['sub_category','variation'])->whereNull('parent_category_id')->get();
 //
         return response()->json([
@@ -33,6 +33,13 @@ class CategoryController extends Controller
             'message' => 'get all categories',
             'data' => $categories,
         ]);
+    }
+
+    public function categoryWithParent()
+    {
+        $categories = category::with('parent')->get();
+
+        return response()->json($categories);
     }
 
 
