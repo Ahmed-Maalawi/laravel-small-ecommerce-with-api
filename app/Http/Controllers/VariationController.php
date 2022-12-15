@@ -13,7 +13,7 @@ class VariationController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:admin-api');
+        $this->middleware('auth:admin-api', ['except' => ['index']]);
     }
     /**
      * Display a listing of the resource.

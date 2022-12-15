@@ -100,7 +100,7 @@ Route::prefix('admin')->group(function () {
         Route::post('store', 'store');
         Route::post('update/{id}', 'update');
         Route::delete('destroy/{id}', 'destroy');
-//        Route::delete('delete-main-image/{id}', 'clearProductImage');
+        Route::get('get-categoryParent', 'categoryWithParent');
     });
 
     Route::controller(VariationController::class)->prefix('variation')->group(function (){
@@ -120,3 +120,6 @@ Route::prefix('admin')->group(function () {
     });
 
 });
+
+
+Route::get('test', [CategoryController::class, 'categoryWithParent']);
