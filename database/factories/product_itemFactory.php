@@ -17,7 +17,10 @@ class product_itemFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'sku' => $this->faker->randomAscii(),
+            'qty_in_stock' => $this->faker->numberBetween(1, 5000),
+            'product_image' => 'image/product.jpg',
+            'price' => $this->faker->numberBetween(100, 100000),
         ];
     }
 }

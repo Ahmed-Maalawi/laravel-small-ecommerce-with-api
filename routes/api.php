@@ -8,7 +8,7 @@ use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\variation_optionsController;
 use App\Http\Controllers\VariationController;
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\wishListController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -43,7 +43,6 @@ Route::middleware('api')->prefix('auth')->group(function () {
    });
 
 
-
 });
 
 Route::controller(AddressController::class)->middleware('api')->prefix('address')->group(function (){
@@ -52,6 +51,15 @@ Route::controller(AddressController::class)->middleware('api')->prefix('address'
     Route::post('update-address/{id}', 'update');
     Route::delete('delete-address/{id}', 'destroy');
 });
+
+Route::controller(wishListController::class)->prefix('wishlist')->group(function () {
+    Route::get('all', 'getWishList');
+    Route::post('add-product/{id}', 'storeWishList');
+    Route::delete('remove-item/{id}', 'removeWishList');
+});
+
+
+
 
 Route::controller(ProductController::class)->prefix('product')->group( function() {
     Route::get('/all', 'index');
@@ -92,7 +100,7 @@ Route::prefix('admin')->group(function () {
         Route::post('store', 'store');
         Route::post('update/{id}', 'update');
         Route::delete('destroy/{id}', 'destroy');
-//        Route::delete('delete-main-image/{id}', 'clearProductImage');
+        Route::get('get-categoryParent', 'categoryWithParent');
     });
 
     Route::controller(VariationController::class)->prefix('variation')->group(function (){
@@ -112,3 +120,6 @@ Route::prefix('admin')->group(function () {
     });
 
 });
+
+
+Route::get('test', [CategoryController::class, 'categoryWithParent']);

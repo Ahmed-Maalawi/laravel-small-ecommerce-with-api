@@ -28,7 +28,7 @@ class CategoryStoreRequest extends FormRequest
     {
         return [
             'category_name' => 'required | string | min:3',
-            'parent_category_id' => 'required',
+            'parent_category_id' => 'nullable',
         ];
     }
 

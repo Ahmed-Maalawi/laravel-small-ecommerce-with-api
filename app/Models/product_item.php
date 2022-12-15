@@ -23,5 +23,13 @@ class product_item extends Model
         return $this->hasMany(product_configuration::class);
     }
 
+    public function favourites()
+    {
+        return $this->belongsTo(FavouriteItem::class, 'id', 'product_item_id')->where('user_id', auth()->id());
+    }
 
+    public function shoppingCartItem()
+    {
+        return $this->hasMany(shopping_cart_item::class);
+    }
 }

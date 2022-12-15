@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\variation;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,10 @@ class variation_optionFactory extends Factory
      */
     public function definition()
     {
+        static $id = 1;
         return [
-            //
+            'value' => sprintf('value %s', $id++),
+            'variation_id' => variation::factory(),
         ];
     }
 }

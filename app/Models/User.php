@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
@@ -67,5 +66,16 @@ class User extends Authenticatable implements JWTSubject
     public function user_address()
     {
         return $this->hasMany(user_address::class);
+    }
+
+
+    public function withlist()
+    {
+        return $this->hasMany(wishlist::class);
+    }
+
+    public function shoppingCart()
+    {
+        return $this->hasOne(shopping_cart::class);
     }
 }

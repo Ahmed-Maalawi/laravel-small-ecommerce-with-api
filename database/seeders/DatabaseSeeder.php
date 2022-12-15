@@ -26,38 +26,60 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        //        User::factory(10)->create();
-        User::factory(10)->create();
         Admin::factory(1)->create();
+        User::factory(10)->create();
 
-        // Admin::factory(1)->create();
-        //        category::factory(5)->create();
+       $categories = category::factory(3)->create()->each(function ($category) {
+           variation::factory(rand(1,3))->create([
+               'category_id' => $category->id
+           ])->each(function ($variation) {
+               variation_option::factory(3)->create([
+                   'variation_id' => $variation->id
+               ]);
+           });
 
-        category::factory()->create([
-            'category_name' => 'ملابس',
-            'parent_category_id' => null,
-        ]);
-
-        category::factory()->create([
-            'category_name' => 'رجالي',
-            'parent_category_id' => 1,
-        ]);
-
-        category::factory()->create([
-            'category_name' => 'شورتات',
-            'parent_category_id' => 2,
-        ]);
+           $products = product::factory(5)->create([
+               'category_id' => $category->id,
+           ])->each(function ($product) {
+               product_item::factory(2)->create([
+                   'product_id' => $product->id,
+               ]);
+           });
+       });
 
 
-        variation::factory()->create([
-            'name' => 'اللون',
-            'category_id' => 3,
-        ]);
 
-        variation::factory()->create([
-            'name' => 'المقاس',
-            'category_id' => 3,
-        ]);
+
+
+
+
+
+//======================================================
+//        category::factory()->create([
+//            'category_name' => 'ملابس',
+//            'parent_category_id' => null,
+//        ]);
+//
+//        category::factory()->create([
+//            'category_name' => 'رجالي',
+//            'parent_category_id' => 1,
+//        ]);
+//
+//        category::factory()->create([
+//            'category_name' => 'شورتات',
+//            'parent_category_id' => 2,
+//        ]);
+//
+//
+//        variation::factory()->create([
+//            'name' => 'اللون',
+//            'category_id' => 3,
+//        ]);
+//
+//        variation::factory()->create([
+//            'name' => 'المقاس',
+//            'category_id' => 3,
+//        ]);
 
 
 
